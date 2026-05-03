@@ -7,7 +7,6 @@ import { icons } from '../../lib/cloudinary';
 export const Navbar = () => {
     const { user, isAuthenticated, logoutUser } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
 
     const handleLogout = async () => {
         await authService.logout();
@@ -17,20 +16,10 @@ export const Navbar = () => {
 
     const closeMenu = () => setMenuOpen(false);
 
-    useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 10);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     return (
         <>
-            <nav className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-10 lg:px-20 py-3 flex items-center justify-between w-full border-b transition-all duration-300 ${
-                scrolled
-                    ? 'bg-white/95 backdrop-blur-md border-border shadow-md'
-                    : 'bg-card border-transparent shadow-none'
-                }`}
-            >
+            <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-10 lg:px-20 py-3 flex items-center justify-between w-full border-b border-border bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
 
                 <Link 
                     to="/" 
