@@ -1342,18 +1342,21 @@ export const getPlaces = async (req, res) => {
 export const addPlace = async (req, res) => {
     try {
         const { name, type, rating, review, address, dish, activityPhotos } = req.body;
-        let photo = null;
         let photos = [];
 
         if (req.files && req.files.length > 0) {
-            photos = await Promise.all(
+            const uploaded = await Promise.all(
                 req.files.map(f => uploadToCloudinary(f.buffer, `users/${req.userId}/places`))
             );
-            photo = photos[0] || null;
-        } else if (activityPhotos) {
-            photos = Array.isArray(activityPhotos) ? activityPhotos : [activityPhotos];
-            photo = photos[0] || null;
+            photos = [...photos, ...uploaded];
         }
+
+        if (activityPhotos) {
+            const actPhotos = Array.isArray(activityPhotos) ? activityPhotos : [activityPhotos];
+            photos = [...photos, ...actPhotos];
+        }
+
+        const photo = photos[0] || null;
 
         const place = await prisma.tripPlace.create({
             data: {
