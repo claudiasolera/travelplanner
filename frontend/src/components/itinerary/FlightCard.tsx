@@ -120,7 +120,7 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                             )}
                         </div>
 
-                        <div className="flex-1 flex items-center justify-center gap-4">
+                        <div className="flex-1 flex items-center justify-between gap-2 md:gap-4 min-w-0">
                             <div className="text-center">
                                 <p className="text-2xl font-normal text-text">
                                     {depTime}
@@ -129,7 +129,7 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                                     {originCode}
                                 </p>
                             </div>
-                            <div className="w-36 flex flex-col items-center gap-1">
+                            <div className="w-24 md:w-36 flex flex-col items-center gap-1 shrink-0">
                                 <p className="text-xs text-text-soft">
                                     {duration}
                                 </p>
@@ -143,7 +143,7 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                                     {stopsLabel}
                                 </p>
                             </div>
-                            <div className="text-center">
+                            <div className="text-center min-w-0">
                                 <p className="text-2xl font-normal text-text">
                                     {arrTime}
                                 </p>
@@ -154,7 +154,7 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                         </div>
                     </div>
 
-                    <div className="border-l border-border px-4 py-3 flex flex-col items-center justify-center gap-2 shrink-0 w-36">
+                    <div className="border-l border-border px-4 py-3 flex flex-col items-center justify-center gap-2 shrink-0 w-28 md:w-36">
                         <p className="text-xl font-bold text-text">
                             {flight.price?.amount ?? flight.price ?? '—'}€
                         </p>
