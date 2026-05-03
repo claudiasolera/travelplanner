@@ -76,7 +76,7 @@ export const tripService = {
 
     getItineraries: (tripId: string) => apiClient(`/trips/${tripId}`),
 
-    getPdfUrl: (id: number) => `http://localhost:5000/trips/${id}/pdf`,
+    getPdfUrl: (id: string | number) => `${import.meta.env.VITE_API_URL}/trips/${id}/pdf`,
 
     getCollaborators: (tripId: string) =>
         apiClient(`/trips/${tripId}/collaborators`),
