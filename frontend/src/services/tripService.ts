@@ -76,7 +76,7 @@ export const tripService = {
 
     getItineraries: (tripId: string) => apiClient(`/trips/${tripId}`),
 
-    getPdfUrl: (id: string | number) => `/api/trips/${id}/pdf`,
+    getPdfUrl: (id: string | number) => `https://proyectofinal-backend-production-7188.up.railway.app/api/trips/${id}/pdf`,
 
     getCollaborators: (tripId: string) =>
         apiClient(`/trips/${tripId}/collaborators`),
