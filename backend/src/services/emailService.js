@@ -1,10 +1,15 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD,
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
@@ -16,12 +21,14 @@ export const sendVerificationEmail = async (email, name, token) => {
             from: '"Travel Planner" <noreply@tuapp.com>',
             to: email,
             subject: 'Verifica tu cuenta',
-            html: `...`
+            html: `...tu html...`
         });
         console.log('✅ Email enviado a:', email);
+        return true;
     } catch (error) {
-        console.error('❌ Error enviando email:', error.message);
-        throw error;
+        console.error('❌ Error enviando email (pero el registro continúa):', error.message);
+        
+        return false; 
     }
 };
 
