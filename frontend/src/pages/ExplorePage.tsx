@@ -21,6 +21,7 @@ export const ExplorePage = () => {
     const { toasts, showToast, removeToast } = useToast();
     const [activeTab, setActiveTab] = useState<Tab>('flights');
     const [addToTrip, setAddToTrip] = useState<{ type: 'flight' | 'hotel'; data: any } | null>(null);
+    const [showFilters, setShowFilters] = useState(false);
 
     // Vuelos
     const [flightInputs, setFlightInputs] = useState({
@@ -275,9 +276,19 @@ export const ExplorePage = () => {
             </div>
 
                 {activeTab === 'flights' && flights.length > 0 && (
-                    <div className="flex gap-6 px-10 py-10">
+                    <div className="flex flex-col lg:flex-row gap-6 px-4 md:px-6 lg:px-10 py-6 md:py-10">
 
-                        <aside className="w-72 shrink-0 space-y-4 bg-primary-light rounded-3xl p-4">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="lg:hidden bg-primary text-white px-4 py-2 rounded-xl text-sm"
+                        >
+                            {showFilters ? 'Ocultar filtros' : 'Mostrar filtros'}
+                        </button>
+
+                        <aside className={`${
+                                showFilters ? 'block' : 'hidden'
+                            } lg:block w-full lg:w-72 shrink-0 space-y-4 bg-primary-light rounded-3xl p-4`}
+                        >
 
                             <div className="pb-4 border-b border-primary/20">
                                 <h3 className="text-lg font-bold text-text mb-3">Ordenar por</h3>
@@ -473,9 +484,19 @@ export const ExplorePage = () => {
                 )}
 
                 {activeTab === 'hotels' && hotels.length > 0 && (
-                    <div className="flex gap-6 px-10 py-10">
+                    <div className="flex flex-col lg:flex-row gap-6 px-4 md:px-6 lg:px-10 py-6 md:py-10">
 
-                        <aside className="w-72 shrink-0 space-y-4 bg-primary-light rounded-3xl p-4">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="lg:hidden bg-primary text-white px-4 py-2 rounded-xl text-sm"
+                        >
+                            {showFilters ? 'Ocultar filtros' : 'Mostrar filtros'}
+                        </button>
+
+                        <aside className={`${
+                                showFilters ? 'block' : 'hidden'
+                            } lg:block w-full lg:w-72 shrink-0 space-y-4 bg-primary-light rounded-3xl p-4`}
+                        >
 
                             <div className="pb-4 border-b border-primary/20">
                                 <h3 className="text-lg font-bold text-text mb-3">Ordenar por</h3>
@@ -591,10 +612,10 @@ export const ExplorePage = () => {
                             </div>
                         </aside>
 
-                        <div className="flex-1">
+                        <div className="flex-1 w-full">
                             <div className="mb-4 space-y-2">
                                 <p className="text-sm text-text-secondary">{filteredHotels.length} hoteles encontrados</p>
-                                <div className="flex items-center gap-2 bg-white border border-border rounded-xl px-4 py-2.5 w-72">
+                                <div className="flex items-center gap-2 bg-white border border-border rounded-xl px-4 py-2.5 w-full md:w-72">
                                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9A9A9A" strokeWidth="2">
                                         <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
                                     </svg>
