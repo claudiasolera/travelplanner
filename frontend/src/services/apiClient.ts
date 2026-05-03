@@ -16,7 +16,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}) => 
     };
 
     try {
-        const response = await fetch(`${BASE_URL}${cleanEndpoint}`, { ...options, headers });
+        const response = await fetch(`proyectofinal-backend-production-7188.up.railway.app${cleanEndpoint}`, { ...options, headers });
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));

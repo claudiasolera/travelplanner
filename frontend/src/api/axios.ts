@@ -5,7 +5,7 @@ const BASE_URL = import.meta.env.VITE_API_URL
     : '/api';
 
 const api = axios.create({
-    baseURL: BASE_URL,
+    baseURL: 'proyectofinal-backend-production-7188.up.railway.app',
 });
 
 api.interceptors.request.use((config) => {
