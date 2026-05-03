@@ -170,10 +170,10 @@ export const CreateTripPage = () => {
                                 </div>
                                 {fieldErrors.origin && <p className="field-error">{fieldErrors.origin}</p>}
                                 {showOriginSugg && originSuggestions.length > 0 && (
-                                    <ul className="absolute z-10 w-full bg-card border border-border rounded-2xl mt-1 shadow-lg overflow-hidden">
+                                    <ul className="absolute z-10 w-full bg-card border border-border rounded-2xl mt-1 shadow-lg">
                                         {originSuggestions.map((s, i) => (
                                             <li key={i} className="flex items-center gap-2 px-4 py-2.5 text-sm text-text hover:bg-primary-light cursor-pointer transition"
-                                                onMouseDown={() => { setFormData({ ...formData, origin: s }); setShowOriginSugg(false); }}>
+                                                onClick={() => { setFormData({ ...formData, origin: s }); setShowOriginSugg(false); }}>
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2"><circle cx="12" cy="10" r="4"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
                                                 {s}
                                             </li>
@@ -200,10 +200,10 @@ export const CreateTripPage = () => {
                                 </div>
                                 {fieldErrors.destination && <p className="field-error">{fieldErrors.destination}</p>}
                                 {showDestSugg && destSuggestions.length > 0 && (
-                                    <ul className="absolute z-10 w-full bg-card border border-border rounded-2xl mt-1 shadow-lg overflow-hidden">
+                                    <ul className="absolute z-10 w-full bg-card border border-border rounded-2xl mt-1 shadow-lg">
                                         {destSuggestions.map((s, i) => (
                                             <li key={i} className="flex items-center gap-2 px-4 py-2.5 text-sm text-text hover:bg-primary-light cursor-pointer transition"
-                                                onMouseDown={() => { setFormData({ ...formData, destination: s }); setShowDestSugg(false); }}>
+                                                onClick={() => { setFormData({ ...formData, destination: s }); setShowDestSugg(false); }}>
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2"><circle cx="12" cy="10" r="4" fill="#dbeafe"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
                                                 {s}
                                             </li>
