@@ -9,7 +9,7 @@ export const PrivacyPage = () => {
             <section className="space-y-3">
                 <h2 className="text-base font-semibold text-text">1. Responsable del tratamiento</h2>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                    Travel Planner es un proyecto académico desarrollado como Trabajo de Fin de Ciclo de Desarrollo de Aplicaciones Web (DAW). El responsable del tratamiento de los datos es el equipo de desarrollo de Travel Planner, con domicilio en Granada, España. Para cualquier consulta relacionada con la privacidad, puede contactar a través de soporte@travelplanner.app.
+                    Travel Planner es un proyecto académico desarrollado como Trabajo de Fin de Ciclo de Desarrollo de Aplicaciones Web (DAW). Para cualquier consulta relacionada con la privacidad, puede contactar a través de soporte@travelplanner.app.
                 </p>
             </section>
 
