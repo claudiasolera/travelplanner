@@ -172,26 +172,30 @@ export const TripDetailsPage = () => {
                         onClick={async () => {
                             try {
                                 const token = localStorage.getItem('token');
-                                const res = await fetch(`/api/trips/${id}/pdf`, {
+                                const res = await fetch(`https://proyectofinal-backend-production-7188.up.railway.app/api/trips/${id}/pdf`, {
                                     headers: { 'Authorization': `Bearer ${token}` }
                                 });
+
                                 if (!res.ok) throw new Error();
+
                                 const blob = await res.blob();
+                                
+                                if (blob.type !== 'application/pdf') throw new Error();
+
                                 const url = URL.createObjectURL(blob);
                                 const a = document.createElement('a');
                                 a.href = url;
-                                a.download = `Itinerario_${trip.destination}.pdf`;
+                                a.download = `Itinerario_${trip?.destination || 'viaje'}.pdf`;
+                                document.body.appendChild(a);
                                 a.click();
+                                document.body.removeChild(a);
                                 URL.revokeObjectURL(url);
-                            } catch { alert('Error al descargar el PDF'); }
+                            } catch (err) { 
+                                alert('Error al descargar el PDF. Asegúrate de estar logueado.'); 
+                            }
                         }}
                         className="flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-xl border border-primary/30 bg-primary-light text-primary hover:bg-primary hover:text-white transition"
                     >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round"/>
-                            <polyline points="7 10 12 15 17 10" strokeLinecap="round" strokeLinejoin="round"/>
-                            <line x1="12" y1="15" x2="12" y2="3" strokeLinecap="round"/>
-                        </svg>
                         PDF
                     </button>
                     {!isCollaborator && (
