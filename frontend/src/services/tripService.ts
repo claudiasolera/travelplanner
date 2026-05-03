@@ -1,5 +1,7 @@
 import { apiClient } from "./apiClient";
 
+const BASE_URL = 'https://proyectofinal-backend-production-7188.up.railway.app/api';
+
 export const tripService = {
     getUserTrips: () => apiClient('/trips'),
     
@@ -71,13 +73,14 @@ export const tripService = {
         if (data.amount) formData.append('amount', data.amount);
         if (data.photo) formData.append('photo', data.photo);
 
-        return fetch(`/api/trips/itinerary/${itineraryId}`, {
+        return fetch(`${BASE_URL}/trips/itinerary/${itineraryId}`, {
             method: 'PATCH',
             headers: { 'Authorization': `Bearer ${token}` },
             body: formData,
-        }).then(res => {
+        }).then(async res => {
             if (!res.ok) throw new Error('Error al añadir actividad');
-            return res.json();
+            const text = await res.text();
+            return text ? JSON.parse(text) : {};
         });
     },
 
