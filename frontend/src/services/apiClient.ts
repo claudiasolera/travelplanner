@@ -1,6 +1,8 @@
-const BASE_URL = import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/api`
-    : '/api';
+// const BASE_URL = import.meta.env.VITE_API_URL
+//     ? `${import.meta.env.VITE_API_URL}/api`
+//     : '/api';
+
+const BASE_URL = 'https://proyectofinal-backend-production-7188.up.railway.app/api';
 
 export const apiClient = async (endpoint: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('token');
@@ -16,7 +18,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}) => 
     };
 
     try {
-        const response = await fetch(`proyectofinal-backend-production-7188.up.railway.app${cleanEndpoint}`, { ...options, headers });
+        const response = await fetch(`${BASE_URL}${cleanEndpoint}`, { ...options, headers });
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
