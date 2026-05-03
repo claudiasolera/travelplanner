@@ -1,0 +1,310 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  name      String?
+  password  String
+  avatar    String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  emailVerified     Boolean   @default(false)
+  verificationToken String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  
+  trips     Trip[]
+  favorites Favorite[]
+  likes        TripLike[]
+  badges       Badge[]
+  reviews    Review[]
+  savedTrips SavedTrip[]
+  followedBy User[]   @relation("UserFollows")
+  following  User[]   @relation("UserFollows")
+  notifications Notification[] @relation("UserNotifications")
+  comments  Comment[]
+  collaboratingTrips TripCollaborator[]
+}
+
+model Trip {
+  id           String      @id @default(uuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  origin       String      @default("")
+  destination  String
+  country      String
+  startDate    DateTime
+  endDate      DateTime
+  budget       Float
+  coverImage   String? 
+  currency     String      @default("EUR")
+  travelersCount Int       @default(1)
+  travelStyle    String    @default("confort")
+  isPublic     Boolean     @default(false)
+  clonedFromId String?
+  clonedFrom   Trip?       @relation("TripClones", fields: [clonedFromId], references: [id])
+  clones       Trip[]      @relation("TripClones")
+  clonesCount  Int         @default(0)
+
+  itineraries  Itinerary[]
+  flights      TripFlight[]
+  hotels       TripHotel[]
+  checklist    TripChecklist[]
+  tasks        TripTask[]
+  likes        TripLike[]
+  reviews      Review[]
+  savedBy      SavedTrip[]
+  comments     Comment[]
+  photos       TripPhoto[]
+  collaborators TripCollaborator[]
+  expenses     TripExpense[]
+  places       TripPlace[]
+  tips         TripTip[]
+  transports   TripTransport[]
+  destinationInfo TripDestinationInfo?
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model TripPhoto {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+}
+
+model TripExpense {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  category  String
+  name      String
+  amount    Float
+  currency  String   @default("EUR")
+  date      DateTime?
+  createdAt DateTime @default(now())
+}
+
+model TripPlace {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name      String
+  type      String   @default("restaurant")
+  photo     String?
+  photos    String[] @default([])
+  rating    Int?
+  review    String?
+  address   String?
+  dish      String?
+  createdAt DateTime @default(now())
+}
+
+model TripTip {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  category  String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model TripTransport {
+  id          String   @id @default(uuid())
+  tripId      String
+  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  mode        String
+  origin      String
+  destination String
+  duration    Int?
+  price       Float?
+  lineaRecomendada String?
+  tipoTransporte   String?
+  operador    String?
+  notas       String?
+  
+  createdAt   DateTime @default(now())
+}
+
+model TripDestinationInfo {
+  id        String   @id @default(uuid())
+  tripId    String   @unique
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model SavedTrip {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tripId])
+}
+
+model Itinerary {
+  id         String   @id @default(uuid())
+  tripId     String
+  trip       Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  day        Int
+  date       DateTime
+  title      String?
+  activities Json     
+  notes      String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      String   
+  itemId    String   
+  data      Json     
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, type, itemId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("UserNotifications", fields: [userId], references: [id])
+  type      String
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model TripLike {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tripId])
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String
+  earnedAt    DateTime @default(now())
+}
+
+model TripFlight {
+  id          String   @id @default(uuid())
+  tripId      String
+  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  airline     String
+  origin      String
+  destination String
+  originCity  String
+  destCity    String
+  departure   DateTime
+  arrival     DateTime
+  duration    String
+  stops       Int      @default(0)
+  price       Float
+  currency    String   @default("EUR")
+  bookingLink String?
+  
+  createdAt   DateTime @default(now())
+}
+
+model TripChecklist {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  category  String
+  text      String
+  checked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model TripTask {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  category  String
+  text      String
+  status    String   @default("Pendiente")
+  priority  String   @default("Media")
+  createdAt DateTime @default(now())
+}
+
+model TripHotel {
+  id          String   @id @default(uuid())
+  tripId      String
+  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  hotelId     String
+  name        String
+  address     String?
+  checkIn     DateTime
+  checkOut    DateTime
+  price       Float?
+  currency    String   @default("EUR")
+  bookingLink String?
+  photo       String?
+  rating      Int?
+  reviewScore Float?
+  
+  createdAt   DateTime @default(now())
+}
+
+model TripCollaborator {
+  id        String   @id @default(uuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([tripId, userId])
+}
