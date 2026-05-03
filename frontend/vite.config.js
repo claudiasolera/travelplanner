@@ -16,6 +16,6 @@ export default defineConfig({
     }
   },
   preview: {
-    allowedHosts: ['proyectofinal-frontend-production.up.railway.app']
+    allowedHosts: true
   }
 })
