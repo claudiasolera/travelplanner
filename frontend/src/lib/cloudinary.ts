@@ -1,4 +1,5 @@
 const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+console.log("CLOUD:", CLOUD)
 const BASE = `https://res.cloudinary.com/${CLOUD}/image/upload`
 
 const t = {
