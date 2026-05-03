@@ -9,6 +9,7 @@ import { DayHeader } from '../components/calendar/DayHeader';
 import { DayFlights } from '../components/calendar/DayFlights';
 import { DayHotels } from '../components/calendar/DayHotels';
 import { ActivityList } from '../components/calendar/ActivityList';
+import { Toast } from '../components/ui/Toast';
 
 export const CalendarPage = () => {
     const { id: tripId } = useParams<{ id: string }>();
@@ -25,6 +26,7 @@ export const CalendarPage = () => {
     const [titleValue, setTitleValue] = useState('');
     const [newActivity, setNewActivity] = useState({ name: '', type: 'Actividad', time: '09:00', notes: '', amount: '', photo: null as File | null });
     const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
 
     const refreshDays = async () => {
         const tripData = await tripService.getTripById(tripId!);
@@ -57,29 +59,20 @@ export const CalendarPage = () => {
     };
 
     const handleAddActivity = async () => {
-        if (!newActivity.name || !currentDay) return;
+        if (!newActivity.name || !currentDay) {
+            setToast({ message: 'El nombre de la actividad es obligatorio', type: 'warning' });
+            return;
+        }
         try {
-            const token = localStorage.getItem('token');
-            const formData = new FormData();
-            formData.append('name', newActivity.name);
-            formData.append('type', newActivity.type);
-            formData.append('time', newActivity.time);
-            formData.append('notes', newActivity.notes);
-            if (newActivity.amount) formData.append('amount', newActivity.amount);
-            if (newActivity.photo) formData.append('photo', newActivity.photo);
-
-            const response = await fetch(`/api/trips/itinerary/${currentDay.id}`, {
-                method: 'PATCH',
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
-            });
-            if (!response.ok) throw new Error('Error');
-
+            await tripService.addActivityWithForm(currentDay.id, newActivity);
             await refreshDays();
             setNewActivity({ name: '', type: 'Actividad', time: '09:00', notes: '', amount: '', photo: null });
             setPhotoPreview(null);
             setShowAddActivity(false);
-        } catch { alert('Error al añadir actividad'); }
+            setToast({ message: 'Actividad añadida correctamente', type: 'success' });
+        } catch {
+            setToast({ message: 'No se pudo añadir la actividad. Inténtalo de nuevo.', type: 'error' });
+        }
     };
 
     const handleDeleteActivity = async (activityId: string) => {
@@ -87,7 +80,10 @@ export const CalendarPage = () => {
         try {
             await tripService.deleteActivity(currentDay.id, activityId);
             await refreshDays();
-        } catch { alert('Error al eliminar actividad'); }
+            setToast({ message: 'Actividad eliminada', type: 'success' });
+        } catch {
+            setToast({ message: 'Error al eliminar la actividad', type: 'error' });
+        }
     };
 
     const handleSaveNotes = async () => {
@@ -96,7 +92,10 @@ export const CalendarPage = () => {
             await tripService.updateItineraryNotes(currentDay.id, { notes: notesValue, title: titleValue });
             await refreshDays();
             setEditingNotes(false);
-        } catch { alert('Error al guardar notas'); }
+            setToast({ message: 'Notas guardadas', type: 'success' });
+        } catch {
+            setToast({ message: 'Error al guardar las notas', type: 'error' });
+        }
     };
 
     const getDayFlights = () => {
@@ -173,6 +172,15 @@ export const CalendarPage = () => {
                     </>
                 )}
             </div>
+            {toast && (
+                <div className="fixed top-5 right-5 z-50">
+                    <Toast
+                        message={toast.message}
+                        type={toast.type}
+                        onClose={() => setToast(null)}
+                    />
+                </div>
+            )}
         </div>
     );
 };

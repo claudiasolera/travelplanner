@@ -54,6 +54,33 @@ export const tripService = {
         body: JSON.stringify(data)
     }),
 
+    addActivityWithForm: (itineraryId: string, data: {
+        name: string;
+        type: string;
+        time: string;
+        notes: string;
+        amount?: string;
+        photo?: File | null;
+    }) => {
+        const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('type', data.type);
+        formData.append('time', data.time);
+        formData.append('notes', data.notes);
+        if (data.amount) formData.append('amount', data.amount);
+        if (data.photo) formData.append('photo', data.photo);
+
+        return fetch(`/api/trips/itinerary/${itineraryId}`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData,
+        }).then(res => {
+            if (!res.ok) throw new Error('Error al añadir actividad');
+            return res.json();
+        });
+    },
+
     deleteActivity: (itineraryId: string, activityId: string) =>
         apiClient(`/trips/itinerary/${itineraryId}/${activityId}`, {
             method: 'DELETE'
