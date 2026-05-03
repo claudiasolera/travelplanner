@@ -104,8 +104,8 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                     </div>
                 </div>
             ) : (
-                <div className="flex">
-                    <div className="flex-1 px-4 py-3 flex items-center gap-4">
+                <div className="flex flex-col md:flex-row">
+                    <div className="w-full md:flex-1 px-4 py-3 flex flex-col md:flex-row items-center gap-3 md:gap-4">
                         
                         <div className="w-12 shrink-0 flex items-center justify-center">
                             {logoError ? (
@@ -120,7 +120,7 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                             )}
                         </div>
 
-                        <div className="flex-1 flex items-center justify-between gap-2 md:gap-4 min-w-0">
+                        <div className="w-full flex items-center justify-between gap-2">
                             <div className="text-center">
                                 <p className="text-2xl font-normal text-text">
                                     {depTime}
@@ -154,8 +154,8 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                         </div>
                     </div>
 
-                    <div className="border-l border-border px-4 py-3 flex flex-col items-center justify-center gap-2 shrink-0 w-28 md:w-36">
-                        <p className="text-xl font-bold text-text">
+                    <div className="w-full md:w-36 border-t md:border-t-0 md:border-l border-border px-4 py-3 flex flex-col items-center justify-center gap-2">
+                        <p className="text-lg md:text-xl font-bold text-text">
                             {flight.price?.amount ?? flight.price ?? '—'}€
                         </p>
                         {mode === 'explore' ? (
@@ -164,14 +164,14 @@ export const FlightCard = ({ flight, onDelete, onUpdate, mode = 'itinerary', onA
                                     <a 
                                         aria-label='Ver vuelo en sitio de reservas'
                                         href={bookingLink} target="_blank" rel="noopener noreferrer"
-                                        className="btn text-sm px-4 py-2 w-full text-center">
+                                        className="btn text-sm px-3 py-2 w-full text-center">
                                         Ver vuelo →
                                     </a>
                                 )}
                                 <button 
                                     aria-label='Añadir al viaje'
                                     onClick={onAddToTrip} 
-                                    className="btn-login text-sm px-4 py-2 w-full"
+                                    className="btn-login text-sm px-3 py-2 w-full"
                                 >
                                     {addLabel}
                                 </button>
