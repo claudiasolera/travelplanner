@@ -1,5 +1,5 @@
 const OLLAMA_URL = 'https://jarvis.ieshlanz.es';
-const MODEL = 'gemma4:e4b';
+const MODEL = 'qwen2.5:7b-instruct';
 
 const TRUSTED_DOMAINS = [
     'tmb.cat', 'renfe.com', 'emtmadrid.es', 'metromadrid.es', 'crtm.es',
@@ -12,7 +12,7 @@ const TRUSTED_DOMAINS = [
 
 const askOllama = async (prompt) => {
     try {
-        const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+        const res = await fetch(`${OLLAMA_URL}/v1/chat/completions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -20,14 +20,14 @@ const askOllama = async (prompt) => {
             },
             body: JSON.stringify({
                 model: MODEL,
-                prompt,
-                stream: false,
-                options: { temperature: 0.5, num_predict: 4000 }
+                messages: [{ role: 'user', content: prompt }],
+                temperature: 0.5,
+                max_tokens: 4000
             })
         });
         if (!res.ok) throw new Error(`Ollama error: ${res.status}`);
         const data = await res.json();
-        return data.response || '';
+        return data.choices?.[0]?.message?.content || '';
     } catch (error) {
         console.error('❌ Error Ollama:', error.message);
         return null;
