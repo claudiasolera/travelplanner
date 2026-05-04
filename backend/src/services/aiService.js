@@ -25,8 +25,13 @@ const askOllama = async (prompt) => {
                 max_tokens: 4000
             })
         });
-        if (!res.ok) throw new Error(`Ollama error: ${res.status}`);
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('❌ Ollama HTTP error:', res.status, errorText);
+            throw new Error(`Ollama error: ${res.status}`);
+        }
         const data = await res.json();
+        console.log('🤖 Respuesta IA:', JSON.stringify(data).substring(0, 500));
         return data.choices?.[0]?.message?.content || '';
     } catch (error) {
         console.error('❌ Error Ollama:', error.message);
