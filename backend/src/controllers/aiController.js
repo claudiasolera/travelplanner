@@ -1,5 +1,8 @@
 import redisClient from '../config/redis.js';
+import { PrismaClient } from '@prisma/client';
 import { getDestinationInfo, getPublicTransportOptions, getTransportComparison } from '../services/aiService.js';
+
+const prisma = new PrismaClient();
 
 export const getRoute = async (req, res) => {
     try {
