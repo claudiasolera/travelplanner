@@ -16,7 +16,7 @@ const askOllama = async (prompt) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': process.env.JARVIS_API_KEY
+                'Authorization': `Bearer ${process.env.JARVIS_API_KEY}`
             },
             body: JSON.stringify({
                 model: MODEL,
