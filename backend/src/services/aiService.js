@@ -14,7 +14,10 @@ const askOllama = async (prompt) => {
     try {
         const res = await fetch(`${OLLAMA_URL}/api/generate`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.JARVIS_API_KEY}`
+            },
             body: JSON.stringify({
                 model: MODEL,
                 prompt,
